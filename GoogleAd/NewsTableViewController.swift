@@ -7,8 +7,19 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 class NewsTableViewController: UITableViewController {
+    
+    // Using a closure to initialize the adBannerView variable, which is an instance of GADBannerView. Specify the type of banner (smart banner) and set the App ID. We use lazy to indicate that adBannerView can be initialized later (when it's used).
+    lazy var adBannerView: GADBannerView = {
+        let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
+        adBannerView.adUnitID = "ca-app-pub-8276118426358329/2542794559"
+        adBannerView.delegate = self
+        adBannerView.rootViewController = self
+        
+        return adBannerView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
