@@ -13,8 +13,8 @@ class NewsTableViewController: UITableViewController {
     
     // Using a closure to initialize the adBannerView variable, which is an instance of GADBannerView. Specify the type of banner (smart banner) and set the App ID. We use lazy to indicate that adBannerView can be initialized later (when it's used).
     lazy var adBannerView: GADBannerView = {
-        let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
-        adBannerView.adUnitID = "ca-app-pub-8276118426358329/2542794559"
+        let adBannerView = GADBannerView(adSize: kGADAdSizeBanner)
+        adBannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         adBannerView.delegate = self
         adBannerView.rootViewController = self
         
@@ -26,6 +26,10 @@ class NewsTableViewController: UITableViewController {
 
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .automatic
+        
+        // Comply to Google's requirement to list your tested device ID
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "1d2b5db1f10096a3fa553059f8074e88" ]
+        adBannerView.load(GADRequest())
     }
 
     override func didReceiveMemoryWarning() {
@@ -125,4 +129,17 @@ class NewsTableViewController: UITableViewController {
     }
     */
 
+}
+
+extension NewsTableViewController: GADBannerViewDelegate {
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        print("Banner loaded successfully")
+        tableView.tableHeaderView?.frame = bannerView.frame
+        tableView.tableHeaderView = bannerView
+    }
+    
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        print("Fail to receive ads")
+        print(error)
+    }
 }
